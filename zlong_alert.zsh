@@ -4,9 +4,6 @@ zmodload zsh/datetime || return
 # Be sure we can actually set hooks
 autoload -Uz add-zsh-hook || return
 
-if ! [[ -x "$(command -v notify-send)" ]]; then
-  echo 'Error: notify-send is not installed.' >&2
-fi
 
 # Define a long duration if needed
 (( ${+zlong_duration} )) || zlong_duration=15
@@ -24,7 +21,7 @@ zlong_alert_func() {
     local cmd=$1
     local secs=$2
     local ftime=$(printf '%dh:%dm:%ds\n' $(($secs / 3600)) $(($secs % 3600 / 60)) $(($secs % 60)))
-    notify-send "Done: $1" "Time: $ftime"
+    osascript -e 'display notification "Done: '"$1"' Time: '"$ftime"'"'
     echo "\a"
 }
 
